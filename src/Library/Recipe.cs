@@ -78,7 +78,7 @@ namespace Full_GRASP_And_SOLID
             return tiempo;
         }
          
-        
+        // Implementamos DIP para abstraer, creando un timer aparte
         public void Cook()
         {
             CountdownTimer countdownTimer = new CountdownTimer();
