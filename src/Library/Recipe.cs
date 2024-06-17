@@ -6,15 +6,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading;
 
 namespace Full_GRASP_And_SOLID
 {
-    public class Recipe : IRecipeContent // Modificado por DIP
+    public class Recipe : IRecipeContent, TimerClient// Modificado por DIP
     {
         // Cambiado por OCP
         private IList<BaseStep> steps = new List<BaseStep>();
 
         public Product FinalProduct { get; set; }
+
+        public bool Cooked {get; private set;}
 
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
@@ -62,5 +66,32 @@ namespace Full_GRASP_And_SOLID
 
             return result;
         }
+    
+        public int GetCookTime()
+        {
+            int tiempo = 0;
+
+            foreach (BaseStep step in this.steps)
+            {
+                tiempo = tiempo + step.Time;
+            }
+            return tiempo;
+        }
+         
+        
+        public void Cook()
+        {
+            CountdownTimer countdownTimer = new CountdownTimer();
+            countdownTimer.Register(this.GetCookTime(), this);
+            
+
+        }
+        public void TimeOut()
+        {
+
+            this.Cooked = true;
+            Console.WriteLine("La rectea esta pronta");
+        }
+
     }
 }
